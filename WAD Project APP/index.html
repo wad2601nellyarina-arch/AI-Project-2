@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toptri Artisan AI - Final Masterpiece</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@1,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --gold: #d4af37;
+        --dark: #050505;
+        --card: rgba(20, 20, 20, 0.85);
+        --blue: #007bff;
+        --red: #ff4d4d;
+        --neon-green: #39ff14;
+      }
+
+      /* --- LATAR BELAKANG BINTANG BERGERAK PELAN --- */
+      body {
+        margin: 0;
+        padding: 0;
+        color: white;
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        justify-content: center;
+        overflow-x: hidden;
+        background-color: #000;
+        min-height: 100vh;
+      }
+
+      .stars-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: radial-gradient(
+          ellipse at bottom,
+          #1b2735 0%,
+          #090a0f 100%
+        );
+        overflow: hidden;
+      }
+
+      .star-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: transparent;
+      }
+
+      /* Lapisan Bintang Banyak & Tajam */
+      .stars-small {
+        width: 1px;
+        height: 1px;
+        box-shadow:
+          10vw 20vh #fff,
+          25vw 10vh #fff,
+          40vw 30vh #fff,
+          60vw 15vh #fff,
+          80vw 25vh #fff,
+          15vw 50vh #fff,
+          35vw 70vh #fff,
+          55vw 60vh #fff,
+          75vw 85vh #fff,
+          90vw 45vh #fff,
+          5vw 90vh #fff,
+          50vw 5vh #fff,
+          20vw 80vh var(--gold),
+          65vw 40vh #fff,
+          85vw 5vh #fff,
+          12vw 12vh #fff,
+          33vw 33vh #fff,
+          66vw 66vh #fff,
+          5vw 35vh #fff,
+          95vw 95vh #fff,
+          44vw 22vh #fff,
+          77vw 11vh #fff,
+          2vw 55vh #fff;
+        animation: moveStars 120s linear infinite;
+      }
+
+      .stars-large {
+        width: 2px;
+        height: 2px;
+        box-shadow:
+          15vw 15vh #fff,
+          45vw 45vh #fff,
+          75vw 75vh #fff,
+          25vw 85vh #fff,
+          85vw 25vh #fff,
+          50vw 10vh var(--gold);
+        animation:
+          moveStars 80s linear infinite,
+          twinkle 4s ease-in-out infinite alternate;
+      }
+
+      @keyframes moveStars {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(-1000px);
+        }
+      }
+
+      @keyframes twinkle {
+        0% {
+          opacity: 0.3;
+          transform: scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+      }
+
+      /* --- SISA CSS (SAMA SEPERTI SEBELUMNYA) --- */
+      .brand-container {
+        position: relative;
+        display: inline-block;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        border-top: 1px solid var(--gold);
+        border-bottom: 1px solid var(--gold);
+      }
+      .brand {
+        font-family: "Playfair Display", serif;
+        font-style: italic;
+        font-size: 38px;
+        color: var(--gold);
+        letter-spacing: 2px;
+      }
+      #ai-section {
+        width: 100%;
+        max-width: 450px;
+        padding: 40px 20px;
+        text-align: center;
+      }
+      .ai-assistant-container {
+        background: var(--card);
+        border-radius: 28px;
+        padding: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(25px);
+      }
+      .ai-bubbles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin: 20px 0;
+      }
+      .bubble {
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 10px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        color: #aaa;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .ai-input-group {
+        display: flex;
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 5px;
+        margin-top: 15px;
+      }
+      input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: white;
+        padding: 12px;
+        outline: none;
+      }
+      .btn-find {
+        background: var(--blue);
+        color: white;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      /* --- ANIMATED LOADER --- */
+      #loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--dark);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+      }
+      .loading-ring {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 4px solid transparent;
+        border-top-color: var(--gold);
+        border-bottom-color: var(--gold);
+        animation: spinRing 1.5s linear infinite;
+        position: relative;
+      }
+      .loading-ring::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        border-radius: 50%;
+        border: 4px solid transparent;
+        border-left-color: white;
+        border-right-color: white;
+        animation: spinRing 1s linear reverse infinite;
+      }
+      @keyframes spinRing {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* --- SCREEN 2: RESULTS --- */
+      #menu-section {
+        display: none;
+        width: 100%;
+        max-width: 450px;
+        padding: 20px;
+      }
+      .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .digital-clock {
+        font-family: monospace;
+        color: var(--gold);
+        font-size: 14px;
+        background: rgba(212, 175, 55, 0.1);
+        padding: 4px 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+      }
+
+      .stat-val.open {
+        color: var(--neon-green);
+        text-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+      }
+      .stats-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+      .stat-card {
+        flex: 1;
+        background: var(--card);
+        padding: 10px;
+        border-radius: 14px;
+        border: 1px solid #333;
+        text-align: center;
+      }
+
+      /* --- PRODUCT CARDS & SCROLL ANIMATION --- */
+      .product-card {
+        background: var(--card);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border: 1px solid #333;
+        position: relative; /* KUNCI UTAMA */
+        text-align: left;
+        overflow: hidden;
+      }
+      .product-card.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .tag-container {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-end;
+      }
+      .tag {
+        font-size: 9px;
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 4px;
+        text-transform: uppercase;
+      }
+      .tag-best {
+        background: var(--gold);
+        color: black;
+      }
+      .tag-promo {
+        background: var(--red);
+        color: white;
+      }
+      /* Membuat bintang dan teks rating menjadi warna gold */
+      .rating-text {
+        color: #d4af37; /* Warna Gold Artisan */
+        font-weight: bold;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+      .rating-text {
+        color: #d4af37;
+        text-shadow: 0 0 5px rgba(212, 175, 55, 0.5); /* Efek cahaya gold */
+      }
+      .p-title {
+        font-weight: 600;
+        font-size: 16px;
+        margin: 5px 0;
+        color: #eee;
+      }
+      .p-price {
+        font-size: 22px;
+        font-weight: bold;
+      }
+      .old-price {
+        text-decoration: line-through;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 14px;
+        margin-right: 8px;
+      }
+      .active-btn {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        border: 1px solid var(--gold);
+        background: transparent;
+        color: var(--gold);
+        padding: 10px 22px;
+        border-radius: 12px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .active-btn.selected {
+        background: var(--gold);
+        color: black;
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+      }
+
+      /* Not Found Animation */
+      .not-found {
+        text-align: center;
+        padding: 60px 20px;
+        animation: bounceIn 0.8s ease;
+      }
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        max-width: 450px;
+        background: rgba(5, 5, 5, 0.95);
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #333;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+      }
+      .checkout-btn {
+        background: var(--gold);
+        border: none;
+        padding: 15px 35px;
+        border-radius: 12px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stars-container">
+      <div class="star-layer stars-small"></div>
+      <div class="star-layer stars-large"></div>
+    </div>
+
+    <div id="ai-section">
+      <div class="brand-container"><div class="brand">toptri</div></div>
+      <div class="ai-assistant-container">
+        <div
+          style="
+            font-family: &quot;Playfair Display&quot;;
+            font-style: italic;
+            color: var(--gold);
+          "
+        >
+          Artisan Assistant
+        </div>
+        <div class="ai-bubbles">
+          <div class="bubble" onclick="quickSearch('Promo')">🏷️ Promo</div>
+          <div class="bubble" onclick="quickSearch('Best Seller')">
+            ⭐ Best Seller
+          </div>
+          <div class="bubble" onclick="quickSearch('Spicy')">🌶️ Spicy</div>
+          <div class="bubble" onclick="quickSearch('Relax')">🍃 Relax</div>
+          <div class="bubble" onclick="quickSearch('under 50000')">
+            💰 < 50k
+          </div>
+        </div>
+        <div class="ai-input-group">
+          <input type="text" id="aiInput" placeholder="Try here..." />
+          <button class="btn-find" onclick="runAI()">FIND</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="loader">
+      <div class="loading-ring"></div>
+      <div
+        style="
+          color: var(--gold);
+          margin-top: 20px;
+          font-size: 10px;
+          letter-spacing: 3px;
+        "
+      >
+        SYNCING DATA...
+      </div>
+    </div>
+
+    <div id="menu-section">
+      <div class="header-top">
+        <div class="brand" style="font-size: 24px">toptri</div>
+        <div class="digital-clock" id="clock">00:00:00</div>
+      </div>
+
+      <div class="ai-input-group" style="margin-bottom: 20px">
+        <input
+          type="text"
+          id="internalSearch"
+          placeholder="Ask AI for more..."
+          onkeyup="if (event.key === 'Enter') internalFilter();"
+        />
+        <button
+          class="btn-find"
+          onclick="internalFilter()"
+          style="padding: 5px 15px; font-size: 10px"
+        >
+          GO
+        </button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div style="font-size: 8px; color: #666">STATUS</div>
+          <div class="stat-val open">● OPEN</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size: 8px; color: #666">LOCATION</div>
+          <div style="font-size: 11px; font-weight: bold">BEKASI</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size: 8px; color: #666">FOUND</div>
+          <div
+            id="itemCount"
+            style="font-size: 11px; font-weight: bold; color: var(--gold)"
+          >
+            0
+          </div>
+        </div>
+      </div>
+
+      <div id="displayArea"></div>
+      <div style="height: 120px"></div>
+
+      <div class="footer">
+        <div>
+          <div
+            id="totalDisplay"
+            style="
+              color: var(--gold);
+              font-size: 26px;
+              font-family: &quot;Playfair Display&quot;;
+              font-style: italic;
+            "
+          >
+            Rp 0
+          </div>
+          <span
+            style="color: #555; font-size: 10px; cursor: pointer"
+            onclick="clearCart()"
+            >Reset</span
+          >
+        </div>
+        <button class="checkout-btn" onclick="sendWhatsApp()">CHECKOUT</button>
+      </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        onValue,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCxOiiiqvRKoIcEdd3KpAIRMKVh-oQqecI",
+        authDomain: "wadproject-app.firebaseapp.com",
+        databaseURL:
+          "https://wadproject-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "wadproject-app",
+        storageBucket: "wadproject-app.firebasestorage.app",
+        messagingSenderId: "667703654885",
+        appId: "1:667703654885:web:18376118de8891df28d70c",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      let masterMenu = [];
+      let cart = [];
+      let total = 0;
+
+      setInterval(() => {
+        document.getElementById("clock").innerText =
+          new Date().toLocaleTimeString("en-GB");
+      }, 1000);
+
+      onValue(ref(db, "/"), (snap) => {
+        const data = snap.val();
+        if (data) {
+          const temp = [];
+          Object.keys(data).forEach((key) => {
+            const node = data[key];
+            if (node.text) temp.push(node);
+            else if (typeof node === "object") {
+              Object.values(node).forEach((sub) => {
+                if (sub.text) temp.push(sub);
+              });
+            }
+          });
+          masterMenu = temp;
+        }
+      });
+
+      // Intersection Observer for Scroll Animation
+      const scrollObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) entry.target.classList.add("show");
+          });
+        },
+        { threshold: 0.1 },
+      );
+
+      window.quickSearch = (val) => {
+        document.getElementById("aiInput").value = val;
+        window.runAI();
+      };
+
+      window.runAI = () => {
+        const q = document.getElementById("aiInput").value.toLowerCase();
+        document.getElementById("ai-section").style.display = "none";
+        document.getElementById("loader").style.display = "flex";
+        setTimeout(() => {
+          document.getElementById("loader").style.display = "none";
+          document.getElementById("menu-section").style.display = "block";
+          document.getElementById("internalSearch").value = q;
+          internalFilter();
+        }, 1800);
+      };
+
+      window.internalFilter = () => {
+        const q = document.getElementById("internalSearch").value.toLowerCase();
+        let filtered = masterMenu;
+        const priceMatch = q.match(/\d+/);
+
+        // LOGIKA PENCARIAN PINTAR
+        if (q.includes("promo")) {
+          filtered = masterMenu.filter((i) => i.old_price);
+        } else if (q.includes("best")) {
+          filtered = masterMenu.filter((i) => parseFloat(i.rating) >= 4.9);
+        } else if (q.includes("spicy") || q.includes("pedas")) {
+          filtered = masterMenu.filter(
+            (i) =>
+              i.text.toLowerCase().includes("spicy") ||
+              i.text.toLowerCase().includes("pedas"),
+          );
+        } else if (q.includes("relax") || q.includes("chill")) {
+          filtered = masterMenu.filter((i) => {
+            const name = i.text.toLowerCase();
+            return (
+              name.includes("coffee") ||
+              name.includes("tea") ||
+              name.includes("lemon") ||
+              name.includes("mint")
+            );
+          });
+        } else if (priceMatch) {
+          const limit = parseInt(priceMatch[0]);
+          filtered = masterMenu.filter((i) => parseInt(i.price) <= limit);
+        } else {
+          filtered = masterMenu.filter(
+            (i) =>
+              i.text.toLowerCase().includes(q) ||
+              i.category?.toLowerCase().includes(q),
+          );
+        }
+        renderMain(filtered);
+      };
+
+      function renderMain(data) {
+        const area = document.getElementById("displayArea");
+        // Update jumlah item yang ditemukan
+        document.getElementById("itemCount").innerText = data.length;
+
+        if (data.length === 0) {
+          area.innerHTML = `<div class="not-found">☄️<br>Item Not Found</div>`;
+          return;
+        }
+
+        area.innerHTML = data
+          .map(
+            (i) => `
+              <div class="product-card show">
+                  <div class="tag-container">
+                      ${i.old_price ? '<div class="tag tag-promo">PROMO</div>' : ""}
+                      ${parseFloat(i.rating) >= 4.9 ? '<div class="tag tag-best">BEST SELLER</div>' : ""}
+                  </div>
+
+                  <div class="rating-display">★ ${i.rating || "4.9"}</div>
+
+                  <div style="font-weight:600; font-size:16px; margin: 10px 0;">${i.text}</div>
+
+                  <div class="price-box">
+                      ${i.old_price ? `<span style="text-decoration:line-through; color:#666; font-size:13px; margin-right:8px;">Rp ${parseInt(i.old_price).toLocaleString("id-ID")}</span>` : ""}
+                      <div style="font-size:20px; font-weight:bold;">Rp ${parseInt(i.price).toLocaleString("id-ID")}</div>
+                  </div>
+
+                  <button class="active-btn ${cart.some((c) => c.name === i.text) ? "selected" : ""}"
+                          onclick="toggleCart(this, '${i.text}', ${i.price})">ADD</button>
+              </div>
+          `,
+          )
+          .join("");
+      }
+
+      setTimeout(() => {
+        document
+          .querySelectorAll(".product-card")
+          .forEach((card) => scrollObserver.observe(card));
+      }, 100);
+
+      window.toggleCart = (btn, name, price) => {
+        const p = parseInt(price);
+        if (btn.classList.contains("selected")) {
+          btn.classList.remove("selected");
+          total -= p;
+          cart = cart.filter((i) => i.name !== name);
+        } else {
+          btn.classList.add("selected");
+          total += p;
+          cart.push({ name, price: p });
+        }
+        document.getElementById("totalDisplay").innerText =
+          `Rp ${total.toLocaleString("id-ID")}`;
+      };
+
+      window.clearCart = () => {
+        cart = [];
+        total = 0;
+        document.getElementById("totalDisplay").innerText = `Rp 0`;
+        document
+          .querySelectorAll(".active-btn")
+          .forEach((b) => b.classList.remove("selected"));
+      };
+
+      window.sendWhatsApp = () => {
+        if (!cart.length) return alert("Pilih menu dulu!");
+        const msg =
+          `Artisan Order:\n` +
+          cart.map((i) => `- ${i.name}`).join("\n") +
+          `\n\nTotal: Rp ${total.toLocaleString("id-ID")}`;
+        window.open(
+          `https://wa.me/6288210230390?text=${encodeURIComponent(msg)}`,
+        );
+      };
+    </script>
+  </body>
+</html>
